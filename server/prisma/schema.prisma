@@ -17,6 +17,7 @@ model User {
   notifications Notification[]
   payments    Payment[]
   reports Report[]
+  reviews Review[]
   createdAt   DateTime     @default(now())
   updatedAt   DateTime     @updatedAt
   oauthAccounts OAuthAccount[]
@@ -43,12 +44,22 @@ model Room {
   id          Int       @id @default(autoincrement())
   number      Int       @unique
   type        RoomType
+  status      RoomStatus @default(AVAILABLE)
   price       Float
   isAvailable Boolean   @default(true)
   features    Json
   bookings    Booking[]
+  reviews     Review[]
+  Discount Discount[] @relation("RoomDiscounts")
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
+}
+
+enum RoomStatus {
+  AVAILABLE
+  BOOKED
+  UNDER_MAINTENANCE
+  CLEANING
 }
 
 enum RoomType {
@@ -144,4 +155,28 @@ enum ReportType {
   FINANCIAL
   OCCUPANCY
   GENERAL
+}
+
+model Discount {
+  id          Int       @id @default(autoincrement())
+  name        String
+  description String?
+  percentage  Float
+  startDate   DateTime
+  endDate     DateTime
+  isActive    Boolean   @default(true)
+  rooms Room[] @relation("RoomDiscounts")
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+model Review {
+  id          Int       @id @default(autoincrement())
+  userId      Int
+  user        User      @relation(fields: [userId], references: [id])
+  roomId      Int
+  room        Room      @relation(fields: [roomId], references: [id])
+  rating      Int       @default(1) 
+  comment     String?
+  createdAt   DateTime  @default(now())
 }
