@@ -12,7 +12,7 @@ model User {
   email       String       @unique
   name        String?
   password    String
-  role        Role
+  role        Role? @default(USER)
   bookings    Booking[]
   notifications Notification[]
   payments    Payment[]
@@ -46,11 +46,11 @@ model Room {
   type        RoomType
   status      RoomStatus @default(AVAILABLE)
   price       Float
-  isAvailable Boolean   @default(true)
-  features    Json
+  isAvailable Boolean?   @default(true)
+  features    Json?
   bookings    Booking[]
   reviews     Review[]
-  Discount Discount[] @relation("RoomDiscounts")
+  discounts   RoomDiscount[]
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
 }
@@ -79,7 +79,7 @@ model Booking {
   checkOut    DateTime
   totalAmount Float
   status      BookingStatus @default(PENDING)
-  services    Service[]
+  services    BookingToService[]
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
   payment     Payment? 
@@ -96,7 +96,7 @@ model Service {
   name        String
   description String?
   price       Float
-  bookings    Booking[]
+  bookings    BookingToService[]
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
 }
@@ -147,7 +147,7 @@ model Report {
   type        ReportType
   adminId Int
   admin       User      @relation(fields: [adminId], references: [id])
-  content     String
+  content     String?
   createdAt   DateTime  @default(now())
 }
 
@@ -165,7 +165,7 @@ model Discount {
   startDate   DateTime
   endDate     DateTime
   isActive    Boolean   @default(true)
-  rooms Room[] @relation("RoomDiscounts")
+  rooms       RoomDiscount[]
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
 }
@@ -179,4 +179,22 @@ model Review {
   rating      Int       @default(1) 
   comment     String?
   createdAt   DateTime  @default(now())
+}
+
+model RoomDiscount {
+  roomId     Int
+  discountId Int
+  room       Room       @relation(fields: [roomId], references: [id])
+  discount   Discount   @relation(fields: [discountId], references: [id])
+
+  @@id([roomId, discountId]) 
+}
+
+model BookingToService {
+  bookingId Int
+  serviceId Int
+  booking Booking @relation(fields: [bookingId], references: [id])
+  service Service @relation(fields: [serviceId], references: [id])
+
+  @@id([bookingId,serviceId])
 }
