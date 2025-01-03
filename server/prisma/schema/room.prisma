@@ -1,0 +1,92 @@
+model Room {
+  id          Int       @id @default(autoincrement())
+  number      Int       @unique
+  type        RoomType
+  status      RoomStatus @default(AVAILABLE)
+  price       Float
+  isAvailable Boolean?   @default(true)
+  features    Json?
+  bookings    Booking[]
+  reviews     Review[]
+  discounts   RoomDiscount[]
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+enum RoomStatus {
+  AVAILABLE
+  BOOKED
+  UNDER_MAINTENANCE
+  CLEANING
+}
+
+enum RoomType {
+  SINGLE
+  DOUBLE
+  SUITE
+  DELUXE
+}
+
+model Booking {
+  id          Int       @id @default(autoincrement())
+  userId      Int
+  user        User      @relation(fields: [userId], references: [id])
+  roomId      Int
+  room        Room      @relation(fields: [roomId], references: [id])
+  checkIn     DateTime
+  checkOut    DateTime
+  totalAmount Float
+  status      BookingStatus @default(PENDING)
+  services    BookingToService[]
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  payment     Payment? 
+}
+
+enum BookingStatus {
+  PENDING
+  CONFIRMED
+  CANCELLED
+}
+
+model Service {
+  id          Int       @id @default(autoincrement())
+  name        String
+  description String?
+  price       Float
+  bookings    BookingToService[]
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+
+model Discount {
+  id          Int       @id @default(autoincrement())
+  name        String
+  description String?
+  percentage  Float
+  startDate   DateTime
+  endDate     DateTime
+  isActive    Boolean   @default(true)
+  rooms       RoomDiscount[]
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+model RoomDiscount {
+  roomId     Int
+  discountId Int
+  room       Room       @relation(fields: [roomId], references: [id])
+  discount   Discount   @relation(fields: [discountId], references: [id])
+
+  @@id([roomId, discountId]) 
+}
+
+model BookingToService {
+  bookingId Int
+  serviceId Int
+  booking Booking @relation(fields: [bookingId], references: [id])
+  service Service @relation(fields: [serviceId], references: [id])
+
+  @@id([bookingId,serviceId])
+}

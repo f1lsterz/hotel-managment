@@ -1,0 +1,10 @@
+model Review {
+  id          Int       @id @default(autoincrement())
+  userId      Int
+  user        User      @relation(fields: [userId], references: [id])
+  roomId      Int
+  room        Room      @relation(fields: [roomId], references: [id])
+  rating      Int       @default(1) 
+  comment     String?
+  createdAt   DateTime  @default(now())
+}
