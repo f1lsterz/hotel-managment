@@ -1,34 +1,35 @@
-import { WebSocketGateway, SubscribeMessage, MessageBody } from '@nestjs/websockets';
-import { ChatService } from './chat.service';
-import { CreateChatDto } from './dto/create-chat.dto';
-import { UpdateChatDto } from './dto/update-chat.dto';
+import {
+  WebSocketGateway,
+  SubscribeMessage,
+  MessageBody,
+} from "@nestjs/websockets";
+import { ChatService } from "./chat.service";
+import { CreateMessageDto } from "./dto/createMessageDto";
+import { UpdateMessageDto } from "./dto/updateMessageDto";
 
-@WebSocketGateway()
+@WebSocketGateway(Number(process.env.SOCKET_PORT) || 3001, {
+  cors: { origin: process.env.SOCKET_API || "http://localhost:3001" },
+})
 export class ChatGateway {
   constructor(private readonly chatService: ChatService) {}
 
-  @SubscribeMessage('createChat')
-  create(@MessageBody() createChatDto: CreateChatDto) {
-    return this.chatService.create(createChatDto);
+  @SubscribeMessage("createMessage")
+  async create(@MessageBody() createMessageDto: CreateMessageDto) {
+    return await this.chatService.createMessage(createMessageDto);
   }
 
-  @SubscribeMessage('findAllChat')
-  findAll() {
-    return this.chatService.findAll();
+  @SubscribeMessage("findAllMessages")
+  async findAll() {
+    return await this.chatService.findAllMessages();
   }
 
-  @SubscribeMessage('findOneChat')
-  findOne(@MessageBody() id: number) {
-    return this.chatService.findOne(id);
+  @SubscribeMessage("updateMessage")
+  async update(@MessageBody() updateMessageDto: UpdateMessageDto) {
+    return await this.chatService.updateMessage(updateMessageDto);
   }
 
-  @SubscribeMessage('updateChat')
-  update(@MessageBody() updateChatDto: UpdateChatDto) {
-    return this.chatService.update(updateChatDto.id, updateChatDto);
-  }
-
-  @SubscribeMessage('removeChat')
-  remove(@MessageBody() id: number) {
-    return this.chatService.remove(id);
+  @SubscribeMessage("deleteMessage")
+  async delete(@MessageBody() id: number) {
+    return await this.chatService.deleteMessage(id);
   }
 }

@@ -7,3 +7,36 @@ datasource db {
   provider = "mysql"
   url      = env("DATABASE_URL")
 }
+
+model User {
+  id          Int          @id @default(autoincrement())
+  email       String       @unique
+  name        String?
+  password    String
+  role        Role? @default(USER)
+  bookings    Booking[]
+  notifications Notification[]
+  payments    Payment[]
+  reports Report[]
+  reviews Review[]
+  oauthAccounts OAuthAccount[]
+  messages Message[]    
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+}
+
+enum Role {
+  ADMIN
+  MANAGER
+  STAFF
+  USER
+}
+
+model OAuthAccount {
+  id            Int     @id @default(autoincrement())
+  provider      String
+  providerId    String
+  userId        Int
+  user          User    @relation(fields: [userId], references: [id])
+  createdAt     DateTime @default(now())
+}
