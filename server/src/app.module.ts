@@ -10,7 +10,6 @@ import { NotificationModule } from "./notification/notification.module";
 import { ReportModule } from "./report/report.module";
 import { ChatModule } from "./chat/chat.module";
 import { ConfigModule } from "@nestjs/config";
-import { NotificationModule } from './notification/notification.module';
 
 @Module({
   imports: [
