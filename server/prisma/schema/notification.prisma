@@ -3,9 +3,11 @@ model Notification {
   userId      Int
   user        User      @relation(fields: [userId], references: [id])
   message     String
-  type        NotificationType
+  type        NotificationType @default(GENERAL)
   isRead      Boolean   @default(false)
   createdAt   DateTime  @default(now())
+
+  @@index([userId, isRead])
 }
 
 enum NotificationType {

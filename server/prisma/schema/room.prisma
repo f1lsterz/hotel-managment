@@ -3,7 +3,7 @@ model Room {
   number      Int       @unique
   type        RoomType
   status      RoomStatus @default(AVAILABLE)
-  price       Float
+  price       Float      @default(0) 
   isAvailable Boolean?   @default(true)
   features    Json?
   bookings    Booking[]
@@ -11,6 +11,8 @@ model Room {
   discounts   RoomDiscount[]
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
+
+  @@index([type, status])
 }
 
 enum RoomStatus {
@@ -30,17 +32,22 @@ enum RoomType {
 model Booking {
   id          Int       @id @default(autoincrement())
   userId      Int
-  user        User      @relation(fields: [userId], references: [id])
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   roomId      Int
-  room        Room      @relation(fields: [roomId], references: [id])
+  room        Room      @relation(fields: [roomId], references: [id], onDelete: Cascade)
   checkIn     DateTime
   checkOut    DateTime
-  totalAmount Float
+  totalAmount Float     @default(0)
   status      BookingStatus @default(PENDING)
   services    BookingToService[]
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
   payment     Payment? 
+
+  @@index([userId])
+  @@index([roomId, status])
+  @@index([checkIn, checkOut])
+  @@unique([roomId, checkIn, checkOut])
 }
 
 enum BookingStatus {
@@ -57,6 +64,8 @@ model Service {
   bookings    BookingToService[]
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
+
+  @@index([name])
 }
 
 
@@ -71,22 +80,27 @@ model Discount {
   rooms       RoomDiscount[]
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
+
+  @@index([isActive])
+  @@index([startDate, endDate])
 }
 
 model RoomDiscount {
   roomId     Int
   discountId Int
-  room       Room       @relation(fields: [roomId], references: [id])
-  discount   Discount   @relation(fields: [discountId], references: [id])
+  room       Room       @relation(fields: [roomId], references: [id], onDelete: Cascade)
+  discount   Discount   @relation(fields: [discountId], references: [id], onDelete: Cascade)
 
   @@id([roomId, discountId]) 
+  @@map("room_discounts")
 }
 
 model BookingToService {
   bookingId Int
   serviceId Int
-  booking Booking @relation(fields: [bookingId], references: [id])
-  service Service @relation(fields: [serviceId], references: [id])
+  booking Booking @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+  service Service @relation(fields: [serviceId], references: [id], onDelete: Cascade)
 
   @@id([bookingId,serviceId])
+  @@map("booking_services")
 }

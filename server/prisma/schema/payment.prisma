@@ -1,11 +1,11 @@
 model Payment {
   id          Int       @id @default(autoincrement())
   userId      Int      
-  user        User      @relation(fields: [userId], references: [id])
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   bookingId   Int       @unique
-  booking     Booking   @relation(fields: [bookingId], references: [id])
-  amount      Float
-  method      PaymentMethod
+  booking     Booking   @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+  amount      Float     @default(0)
+  method      PaymentMethod @default(CREDIT_CARD)
   status      PaymentStatus @default(PENDING)
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
