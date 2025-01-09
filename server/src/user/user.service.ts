@@ -5,13 +5,20 @@ import {
   NotFoundException,
 } from "@nestjs/common";
 import { PrismaService } from "src/prisma.service";
-import bcrypt from "bcrypt";
 import { CreateUserDto } from "./dto/createUserDto";
 import { UpdateUserDto } from "./dto/updateUserDto";
 
 @Injectable()
 export class UserService {
   constructor(private readonly prisma: PrismaService) {}
+
+  async findByEmail(email: string) {
+    try {
+      return await this.prisma.user.findUnique({ where: { email } });
+    } catch (error) {
+      throw new InternalServerErrorException("Error fetching user by email");
+    }
+  }
 
   async findById(id: number) {
     try {
@@ -42,28 +49,12 @@ export class UserService {
   }
 
   async createUser(createUserDto: CreateUserDto) {
-    const { email, password, name } = createUserDto;
-
+    const { email, password, name, role } = createUserDto;
     try {
-      const existingUser = await this.prisma.user.findUnique({
-        where: { email },
-      });
-      if (existingUser) {
-        throw new BadRequestException("Email is already in use");
-      }
-
-      const hashedPassword = await bcrypt.hash(password, 10);
       return await this.prisma.user.create({
-        data: {
-          email,
-          password: hashedPassword,
-          name,
-        },
+        data: { email, password, name, role },
       });
     } catch (error) {
-      if (error instanceof BadRequestException) {
-        throw error;
-      }
       throw new InternalServerErrorException("Error creating user");
     }
   }
