@@ -18,7 +18,7 @@ export class AuthService {
 
   async login(loginDto: LoginDto): Promise<{ accessToken: string }> {
     const { email, password } = loginDto;
-    const user = await this.userService.findByEmail(email);
+    const user = await this.userService.findByEmailOrId({ email });
 
     if (!user || !(await this.validatePassword(password, user.password))) {
       throw new UnauthorizedException("Invalid email or password");
@@ -32,7 +32,7 @@ export class AuthService {
   ): Promise<{ accessToken: string }> {
     const { email, password, name, role } = registrationDto;
 
-    const existingUser = await this.userService.findByEmail(email);
+    const existingUser = await this.userService.findByEmailOrId({ email });
     if (existingUser) {
       throw new ConflictException("Email is already registered");
     }

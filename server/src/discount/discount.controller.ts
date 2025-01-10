@@ -12,12 +12,15 @@ import {
 import { DiscountService } from "./discount.service";
 import { UpdateDiscountDto } from "./dto/updateDiscountDto";
 import { CreateDiscountDto } from "./dto/createDiscountDto";
+import { Roles } from "src/common/types/roles.enum";
+import { Access } from "src/common/decorators/access.decorator";
 
 @Controller("discount")
 export class DiscountController {
   constructor(private readonly discountService: DiscountService) {}
 
   @Post()
+  @Access(Roles.Admin, Roles.Receptionist)
   async createDiscount(@Body() createDiscountDto: CreateDiscountDto) {
     try {
       const discount =
@@ -29,6 +32,7 @@ export class DiscountController {
   }
 
   @Put(":id")
+  @Access(Roles.Admin, Roles.Receptionist)
   async updateDiscount(
     @Param("id") id: number,
     @Body() updateDiscountDto: UpdateDiscountDto
@@ -74,6 +78,7 @@ export class DiscountController {
   }
 
   @Put("deactivate/:id")
+  @Access(Roles.Admin, Roles.Receptionist)
   async deactivateDiscount(@Param("id") id: number) {
     try {
       const deactivatedDiscount =
@@ -88,6 +93,7 @@ export class DiscountController {
   }
 
   @Delete(":id")
+  @Access(Roles.Admin, Roles.Receptionist)
   async deleteDiscount(@Param("id") id: number) {
     try {
       await this.discountService.deleteDiscount(id);

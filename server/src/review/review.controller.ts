@@ -12,12 +12,15 @@ import {
 import { ReviewService } from "./review.service";
 import { CreateReviewDto } from "./dto/createReviewDto";
 import { UpdateReviewDto } from "./dto/updateReviewDto";
+import { Roles } from "src/common/types/roles.enum";
+import { Access } from "src/common/decorators/access.decorator";
 
 @Controller("review")
 export class ReviewController {
   constructor(private readonly reviewService: ReviewService) {}
 
   @Post()
+  @Access(Roles.Admin, Roles.Receptionist, Roles.User)
   async createReview(@Body() createReviewDto: CreateReviewDto) {
     try {
       const review = await this.reviewService.createReview(createReviewDto);
@@ -34,6 +37,7 @@ export class ReviewController {
   }
 
   @Get("user/:userId")
+  @Access(Roles.Admin, Roles.Receptionist, Roles.User)
   async getReviewsForUser(@Param("userId") userId: number) {
     const reviews = await this.reviewService.getReviewsForUser(userId);
     return reviews;
@@ -46,6 +50,7 @@ export class ReviewController {
   }
 
   @Patch(":id")
+  @Access(Roles.Admin, Roles.Receptionist, Roles.User)
   async updateReview(
     @Param("id") id: number,
     @Body() updateReviewDto: UpdateReviewDto
@@ -62,6 +67,7 @@ export class ReviewController {
   }
 
   @Delete(":id")
+  @Access(Roles.Admin, Roles.Receptionist, Roles.User)
   async deleteReview(@Param("id") id: number) {
     try {
       await this.reviewService.deleteReview(id);

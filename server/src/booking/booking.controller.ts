@@ -32,8 +32,8 @@ export class BookingController {
     }
   }
 
-  @Access(Roles.Admin, Roles.Receptionist, Roles.User)
   @Get(":id")
+  @Access(Roles.Admin, Roles.Receptionist, Roles.User)
   async getBookingById(@Param("id") id: number) {
     try {
       const booking = await this.bookingService.getBookingById(id);
@@ -43,8 +43,8 @@ export class BookingController {
     }
   }
 
-  @Access(Roles.Admin, Roles.Receptionist, Roles.User)
   @Get()
+  @Access(Roles.Admin, Roles.Receptionist)
   async getBookings(@Query() filterDto: FilterBookingDto) {
     try {
       const bookings = await this.bookingService.getBookings(filterDto);
@@ -55,6 +55,7 @@ export class BookingController {
   }
 
   @Put(":id")
+  @Access(Roles.Admin, Roles.Receptionist)
   async updateBooking(
     @Param("id") id: number,
     @Body() updateBookingDto: UpdateBookingDto
@@ -71,6 +72,7 @@ export class BookingController {
   }
 
   @Delete(":id")
+  @Access(Roles.Admin, Roles.Receptionist)
   async deleteBooking(@Param("id") id: number) {
     try {
       await this.bookingService.deleteBooking(id);
@@ -81,6 +83,7 @@ export class BookingController {
   }
 
   @Put(":id/cancel")
+  @Access(Roles.Admin, Roles.Receptionist, Roles.User)
   async cancelBooking(@Param("id") id: number) {
     try {
       const cancelledBooking = await this.bookingService.cancelBooking(id);

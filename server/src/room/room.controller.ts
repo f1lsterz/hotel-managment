@@ -16,12 +16,15 @@ import { CreateRoomDto } from "./dto/createRoomDto";
 import { UpdateRoomDto } from "./dto/updateRoomDto";
 import { RoomFiltersDto } from "./dto/roomFiltersDto";
 import { Room, RoomType } from "@prisma/client";
+import { Access } from "src/common/decorators/access.decorator";
+import { Roles } from "src/common/types/roles.enum";
 
 @Controller("room")
 export class RoomController {
   constructor(private readonly roomService: RoomService) {}
 
   @Post()
+  @Access(Roles.Admin, Roles.Receptionist)
   async createRoom(@Body() createRoomDto: CreateRoomDto): Promise<Room> {
     try {
       return await this.roomService.createRoom(createRoomDto);
@@ -34,6 +37,7 @@ export class RoomController {
   }
 
   @Put(":id")
+  @Access(Roles.Admin, Roles.Receptionist)
   async updateRoom(
     @Param("id", ParseIntPipe) id: number,
     @Body() updateRoomDto: UpdateRoomDto
@@ -52,6 +56,7 @@ export class RoomController {
   }
 
   @Delete(":id")
+  @Access(Roles.Admin, Roles.Receptionist)
   async deleteRoom(@Param("id", ParseIntPipe) id: number): Promise<void> {
     try {
       await this.roomService.deleteRoom(id);
