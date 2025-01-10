@@ -45,8 +45,8 @@ lerna-debug.log*
 # temp directory
 .temp
 .tmp
-.txt
-.docx
+*.txt
+*.docx
 
 # Runtime data
 pids
