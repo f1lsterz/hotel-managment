@@ -14,12 +14,15 @@ import { BookingService } from "./booking.service";
 import { CreateBookingDto } from "./dto/createBookingDto";
 import { UpdateBookingDto } from "./dto/updateBookingDto";
 import { FilterBookingDto } from "./dto/filterBookingDto";
+import { Access } from "src/common/decorators/access.decorator";
+import { Roles } from "src/common/types/roles.enum";
 
 @Controller("booking")
 export class BookingController {
   constructor(private readonly bookingService: BookingService) {}
 
   @Post()
+  @Access(Roles.Admin, Roles.Receptionist, Roles.User)
   async createBooking(@Body() createBookingDto: CreateBookingDto) {
     try {
       const booking = await this.bookingService.createBooking(createBookingDto);
@@ -29,6 +32,7 @@ export class BookingController {
     }
   }
 
+  @Access(Roles.Admin, Roles.Receptionist, Roles.User)
   @Get(":id")
   async getBookingById(@Param("id") id: number) {
     try {
@@ -39,6 +43,7 @@ export class BookingController {
     }
   }
 
+  @Access(Roles.Admin, Roles.Receptionist, Roles.User)
   @Get()
   async getBookings(@Query() filterDto: FilterBookingDto) {
     try {

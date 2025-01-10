@@ -29,9 +29,8 @@ model User {
 }
 
 enum Role {
-  ADMIN
-  MANAGER
-  STAFF
+  ADMIN 
+  RECEPTIONIST
   USER
 }
 
