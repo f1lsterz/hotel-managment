@@ -8,7 +8,6 @@ model Payment {
   method      PaymentMethod @default(CREDIT_CARD)
   status      PaymentStatus @default(PENDING)
   createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
 }
 
 enum PaymentMethod {
