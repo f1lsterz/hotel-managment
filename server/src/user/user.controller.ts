@@ -12,6 +12,7 @@ import { FindUserDto } from "./dto/findUserDto";
 import { UpdateUserDto } from "./dto/updateUserDto";
 import { Access } from "src/common/decorators/access.decorator";
 import { Roles } from "src/common/types/roles.enum";
+import { UserByIdPipe } from "src/common/pipes/UserById";
 
 @Controller("user")
 export class UserController {
@@ -32,7 +33,7 @@ export class UserController {
   @Patch(":id")
   @Access(Roles.Admin, Roles.Receptionist, Roles.User)
   async updateUser(
-    @Param("id") id: number,
+    @Param("id", UserByIdPipe) id: number,
     @Body() updateUserDto: UpdateUserDto
   ) {
     return this.userService.updateUser(id, updateUserDto);
@@ -40,7 +41,7 @@ export class UserController {
 
   @Delete(":id")
   @Access(Roles.Admin, Roles.Receptionist)
-  async deleteUser(@Param("id") id: number) {
+  async deleteUser(@Param("id", UserByIdPipe) id: number) {
     return this.userService.deleteUser(id);
   }
 }

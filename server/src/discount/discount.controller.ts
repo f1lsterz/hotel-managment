@@ -13,6 +13,7 @@ import { CreateDiscountDto } from "./dto/createDiscountDto";
 import { Roles } from "src/common/types/roles.enum";
 import { Access } from "src/common/decorators/access.decorator";
 import { DiscountByIdPipe } from "src/common/pipes/DiscountById";
+import { RoomByIdPipe } from "src/common/pipes/RoomById";
 
 @Controller("discount")
 export class DiscountController {
@@ -46,7 +47,7 @@ export class DiscountController {
   }
 
   @Get("room/:roomId")
-  async getDiscountsForRoom(@Param("roomId") roomId: number) {
+  async getDiscountsForRoom(@Param("roomId", RoomByIdPipe) roomId: number) {
     const discounts = await this.discountService.getDiscountsForRoom(roomId);
     return discounts;
   }
