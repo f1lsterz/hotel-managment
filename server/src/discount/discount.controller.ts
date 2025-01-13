@@ -6,14 +6,13 @@ import {
   Delete,
   Param,
   Body,
-  HttpException,
-  HttpStatus,
 } from "@nestjs/common";
 import { DiscountService } from "./discount.service";
 import { UpdateDiscountDto } from "./dto/updateDiscountDto";
 import { CreateDiscountDto } from "./dto/createDiscountDto";
 import { Roles } from "src/common/types/roles.enum";
 import { Access } from "src/common/decorators/access.decorator";
+import { DiscountByIdPipe } from "src/common/pipes/DiscountById";
 
 @Controller("discount")
 export class DiscountController {
@@ -22,87 +21,48 @@ export class DiscountController {
   @Post()
   @Access(Roles.Admin, Roles.Receptionist)
   async createDiscount(@Body() createDiscountDto: CreateDiscountDto) {
-    try {
-      const discount =
-        await this.discountService.createDiscount(createDiscountDto);
-      return discount;
-    } catch (e) {
-      throw new HttpException(e.message, HttpStatus.BAD_REQUEST);
-    }
+    const discount =
+      await this.discountService.createDiscount(createDiscountDto);
+    return discount;
   }
 
   @Put(":id")
   @Access(Roles.Admin, Roles.Receptionist)
   async updateDiscount(
-    @Param("id") id: number,
+    @Param("id", DiscountByIdPipe) id: number,
     @Body() updateDiscountDto: UpdateDiscountDto
   ) {
-    try {
-      const updatedDiscount = await this.discountService.updateDiscount(
-        id,
-        updateDiscountDto
-      );
-      return updatedDiscount;
-    } catch (error) {
-      throw new HttpException(
-        `Error updating discount: ${error.message}`,
-        HttpStatus.NOT_FOUND
-      );
-    }
+    const updatedDiscount = await this.discountService.updateDiscount(
+      id,
+      updateDiscountDto
+    );
+    return updatedDiscount;
   }
 
   @Get()
   async getAllDiscounts() {
-    try {
-      const discounts = await this.discountService.getAllDiscounts();
-      return discounts;
-    } catch (error) {
-      throw new HttpException(
-        `Error fetching discounts: ${error.message}`,
-        HttpStatus.INTERNAL_SERVER_ERROR
-      );
-    }
+    const discounts = await this.discountService.getAllDiscounts();
+    return discounts;
   }
 
   @Get("room/:roomId")
   async getDiscountsForRoom(@Param("roomId") roomId: number) {
-    try {
-      const discounts = await this.discountService.getDiscountsForRoom(roomId);
-      return discounts;
-    } catch (error) {
-      throw new HttpException(
-        `Error fetching discounts for room: ${error.message}`,
-        HttpStatus.INTERNAL_SERVER_ERROR
-      );
-    }
+    const discounts = await this.discountService.getDiscountsForRoom(roomId);
+    return discounts;
   }
 
   @Put("deactivate/:id")
   @Access(Roles.Admin, Roles.Receptionist)
-  async deactivateDiscount(@Param("id") id: number) {
-    try {
-      const deactivatedDiscount =
-        await this.discountService.deactivateDiscount(id);
-      return deactivatedDiscount;
-    } catch (error) {
-      throw new HttpException(
-        `Error deactivating discount: ${error.message}`,
-        HttpStatus.NOT_FOUND
-      );
-    }
+  async deactivateDiscount(@Param("id", DiscountByIdPipe) id: number) {
+    const deactivatedDiscount =
+      await this.discountService.deactivateDiscount(id);
+    return deactivatedDiscount;
   }
 
   @Delete(":id")
   @Access(Roles.Admin, Roles.Receptionist)
-  async deleteDiscount(@Param("id") id: number) {
-    try {
-      await this.discountService.deleteDiscount(id);
-      return { message: "Discount deleted successfully" };
-    } catch (error) {
-      throw new HttpException(
-        `Error deleting discount: ${error.message}`,
-        HttpStatus.NOT_FOUND
-      );
-    }
+  async deleteDiscount(@Param("id", DiscountByIdPipe) id: number) {
+    await this.discountService.deleteDiscount(id);
+    return { message: "Discount deleted successfully" };
   }
 }
