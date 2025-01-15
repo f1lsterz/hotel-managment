@@ -8,13 +8,17 @@ import { UserService } from "src/user/user.service";
 import bcrypt from "bcrypt";
 import { LoginDto } from "./dto/loginDto";
 import { RegistrationDto } from "./dto/registrationDto";
+import { GoogleUser } from "src/common/types/googleUser";
+import { User } from "@prisma/client";
 
 @Injectable()
 export class AuthService {
-  constructor(
-    private readonly userService: UserService,
-    private readonly jwtService: JwtService
-  ) {}
+  async validateGoogleUser(googleUser: GoogleUser): Promise<User> {
+    const user = await this..findByEmail(googleUser.email);
+    if (user) return user;
+
+    return this.userRepository.create(googleUser);
+  }
 
   async login(loginDto: LoginDto): Promise<{ accessToken: string }> {
     const { email, password } = loginDto;
@@ -55,9 +59,9 @@ export class AuthService {
     return await bcrypt.compare(password, userPassword);
   }
 
-  private generateAccessToken(user: any): { accessToken: string } {
+  private async generateAccessToken(user: any): { accessToken: string } {
     const payload = { email: user.email, sub: user.id, role: user.role };
-    const accessToken = this.jwtService.sign(payload);
+    const accessToken = this.jwtService.signAsync(payload);
     return { accessToken };
   }
 }

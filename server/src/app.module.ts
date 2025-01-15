@@ -10,10 +10,12 @@ import { NotificationModule } from "./notification/notification.module";
 import { ReportModule } from "./report/report.module";
 import { ChatModule } from "./chat/chat.module";
 import { ConfigModule } from "@nestjs/config";
+import config from "./config/config";
 
 @Module({
   imports: [
     ConfigModule.forRoot({
+      load: [config],
       isGlobal: true,
     }),
     AuthModule,

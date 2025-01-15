@@ -7,5 +7,6 @@ import { UserByIdPipe } from "src/common/pipes/UserById";
 @Module({
   controllers: [UserController],
   providers: [UserService, PrismaService, UserByIdPipe],
+  exports: [UserService],
 })
 export class UserModule {}

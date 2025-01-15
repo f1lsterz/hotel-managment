@@ -1,28 +1,16 @@
 import { Module } from "@nestjs/common";
 import { AuthService } from "./auth.service";
 import { AuthController } from "./auth.controller";
-import { PrismaService } from "src/prisma.service";
 import { PassportModule } from "@nestjs/passport";
 import { JwtModule } from "@nestjs/jwt";
-import { UserService } from "src/user/user.service";
-import { JwtStrategy } from "src/common/strategies/jwtStrategy";
+import { JwtStrategy } from "src/common/strategies/jwt.strategy";
 import { UserByIdPipe } from "src/common/pipes/UserById";
+import { UserModule } from "src/user/user.module";
+import { GoogleStrategy } from "src/common/strategies/google.strategy";
 
 @Module({
-  imports: [
-    PassportModule,
-    JwtModule.register({
-      secret: process.env.JWT_SECRET || "hotel_to_hotel",
-      signOptions: { expiresIn: "1d" },
-    }),
-  ],
+  imports: [UserModule, PassportModule, JwtModule.register({})],
   controllers: [AuthController],
-  providers: [
-    AuthService,
-    UserService,
-    JwtStrategy,
-    PrismaService,
-    UserByIdPipe,
-  ],
+  providers: [AuthService, JwtStrategy, GoogleStrategy, UserByIdPipe],
 })
 export class AuthModule {}
