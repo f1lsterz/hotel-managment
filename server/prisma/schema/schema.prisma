@@ -20,7 +20,6 @@ model User {
   payments    Payment[]
   reports Report[]
   reviews Review[]
-  oauthAccounts OAuthAccount[]
   messages Message[]    
 
   @@index([role])
@@ -30,15 +29,4 @@ enum Role {
   ADMIN 
   RECEPTIONIST
   USER
-}
-
-model OAuthAccount {
-  id            Int     @id @default(autoincrement())
-  provider      String
-  providerId    String
-  userId        Int
-  user          User    @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@index([provider, providerId])
-  @@unique([provider, providerId])
 }

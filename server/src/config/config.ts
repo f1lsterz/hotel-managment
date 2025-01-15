@@ -10,8 +10,8 @@ export default registerAs("config", () => ({
       process.env.DATABASE_URL ||
       "mysql://root:123456@localhost:3306/hotel_management",
   },
-  jwt: {
-    secret: process.env.JWT_SECRET || "hotel_to_hotel",
+  secret: process.env.JWT_SECRET || "hotel_to_hotel",
+  signOptions: {
     expiresIn: process.env.JWT_EXPIRES || "1d",
   },
   sockets: {

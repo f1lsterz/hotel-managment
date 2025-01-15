@@ -7,10 +7,26 @@ import { JwtStrategy } from "src/common/strategies/jwt.strategy";
 import { UserByIdPipe } from "src/common/pipes/UserById";
 import { UserModule } from "src/user/user.module";
 import { GoogleStrategy } from "src/common/strategies/google.strategy";
+import config from "src/config/config";
+import { GoogleOAuthGuard } from "src/common/guards/googleOAuth.guard";
+import { JwtAuthGuard } from "src/common/guards/jwtAuth.guard";
+import { RolesGuard } from "src/common/guards/role.guard";
 
 @Module({
-  imports: [UserModule, PassportModule, JwtModule.register({})],
+  imports: [
+    JwtModule.registerAsync(config.asProvider()),
+    UserModule,
+    PassportModule,
+  ],
   controllers: [AuthController],
   providers: [AuthService, JwtStrategy, GoogleStrategy, UserByIdPipe],
+  exports: [
+    AuthService,
+    GoogleOAuthGuard,
+    JwtAuthGuard,
+    GoogleStrategy,
+    RolesGuard,
+    JwtModule,
+  ],
 })
 export class AuthModule {}

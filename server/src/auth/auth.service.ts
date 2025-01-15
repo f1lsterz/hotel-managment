@@ -1,5 +1,6 @@
 import {
   ConflictException,
+  Inject,
   Injectable,
   UnauthorizedException,
 } from "@nestjs/common";
@@ -10,14 +11,31 @@ import { LoginDto } from "./dto/loginDto";
 import { RegistrationDto } from "./dto/registrationDto";
 import { GoogleUser } from "src/common/types/googleUser";
 import { User } from "@prisma/client";
+import config from "src/config/config";
+import { ConfigType } from "@nestjs/config";
 
 @Injectable()
 export class AuthService {
+  constructor(
+    @Inject(config.KEY) private configService: ConfigType<typeof config>,
+    private readonly userService: UserService,
+    private readonly jwtService: JwtService
+  ) {}
+
   async validateGoogleUser(googleUser: GoogleUser): Promise<User> {
-    const user = await this..findByEmail(googleUser.email);
+    const user = await this.userService.findByEmailOrId({
+      email: googleUser.email,
+    });
+
     if (user) return user;
 
-    return this.userRepository.create(googleUser);
+    return this.userService.createUser({
+      email: googleUser.email,
+      name: googleUser.name,
+      photoUrl: googleUser.photoURL,
+      password: "",
+      role: "USER",
+    });
   }
 
   async login(loginDto: LoginDto): Promise<{ accessToken: string }> {
@@ -59,9 +77,12 @@ export class AuthService {
     return await bcrypt.compare(password, userPassword);
   }
 
-  private async generateAccessToken(user: any): { accessToken: string } {
+  async generateAccessToken(user: any): Promise<{ accessToken: string }> {
     const payload = { email: user.email, sub: user.id, role: user.role };
-    const accessToken = this.jwtService.signAsync(payload);
+    const accessToken = await this.jwtService.signAsync(payload, {
+      secret: this.configService.secret,
+      expiresIn: this.configService.signOptions.expiresIn,
+    });
     return { accessToken };
   }
 }
