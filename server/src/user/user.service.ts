@@ -38,7 +38,6 @@ export class UserService {
         email: true,
         name: true,
         role: true,
-        createdAt: true,
       },
     });
 

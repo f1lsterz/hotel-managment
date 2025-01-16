@@ -1,5 +1,27 @@
-import { User } from "../utils/types/user";
-import { $authHost } from "./config";
+import { User, Login, Registration } from "../utils/types/user";
+import { $authHost, $host } from "./config";
+
+export const login = async (data: Login): Promise<{ accessToken: string }> => {
+  try {
+    const response = await $host.post("/auth/login", data);
+    return response.data;
+  } catch (error) {
+    console.error("Error during login:", error);
+    throw error;
+  }
+};
+
+export const registration = async (
+  data: Registration
+): Promise<{ accessToken: string }> => {
+  try {
+    const response = await $host.post("/auth/registration", data);
+    return response.data;
+  } catch (error) {
+    console.error("Error during registration:", error);
+    throw error;
+  }
+};
 
 export const fetchAllUsers = async (): Promise<User[]> => {
   try {
