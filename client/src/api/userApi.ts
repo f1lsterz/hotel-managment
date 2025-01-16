@@ -1,4 +1,6 @@
-import { User, Login, Registration } from "../utils/types/user";
+import { Login } from "../utils/types/login";
+import { Registration } from "../utils/types/registration";
+import { User } from "../utils/types/user";
 import { $authHost, $host } from "./config";
 
 export const login = async (data: Login): Promise<{ accessToken: string }> => {

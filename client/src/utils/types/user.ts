@@ -4,14 +4,6 @@ export enum Role {
   USER = "USER",
 }
 
-export interface OAuthAccount {
-  id: number;
-  provider: string;
-  providerId: string;
-  userId: number;
-  createdAt: string;
-}
-
 export interface User {
   id: number;
   email: string;
