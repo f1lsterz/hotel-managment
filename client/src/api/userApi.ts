@@ -13,6 +13,16 @@ export const login = async (data: Login): Promise<{ accessToken: string }> => {
   }
 };
 
+export const logout = async (): Promise<{ message: string }> => {
+  try {
+    const response = await $authHost.post("/auth/logout");
+    return response.data;
+  } catch (error) {
+    console.error("Error during login:", error);
+    throw error;
+  }
+};
+
 export const registration = async (
   data: Registration
 ): Promise<{ accessToken: string }> => {
