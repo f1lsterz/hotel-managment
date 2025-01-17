@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { login } from "../api/userApi";
 
 const LoginForm: React.FC = () => {
@@ -6,6 +7,7 @@ const LoginForm: React.FC = () => {
     email: "",
     password: "",
   });
+  const navigate = useNavigate();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -18,6 +20,8 @@ const LoginForm: React.FC = () => {
       await login(formData);
       setFormData({ email: "", password: "" });
     } catch (error) {}
+
+    navigate("/home");
   };
 
   return (
@@ -62,8 +66,19 @@ const LoginForm: React.FC = () => {
         type="submit"
         className="w-full bg-indigo-600 text-white py-2 px-4 rounded-md hover:bg-indigo-700 transition"
       >
-        Register
+        Sign in
       </button>
+
+      <div className="text-sm text-center mt-4">
+        Don't have an account?{" "}
+        <button
+          type="button"
+          className="text-indigo-600 hover:underline"
+          onClick={() => navigate("/registration")}
+        >
+          Sign up
+        </button>
+      </div>
     </form>
   );
 };

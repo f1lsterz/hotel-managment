@@ -1,3 +1,4 @@
+import Authorization from "./pages/Authorization";
 import Registration from "./pages/Registration";
 import {
   AUTHORIZATION_ROUTE,
@@ -14,5 +15,9 @@ export const publicRoutes: Array<{ path: string; Component: JSX.Element }> = [
   {
     path: AUTHORIZATION_ROUTE,
     Component: <Authorization />,
+  },
+  {
+    path: HOME_ROUTE,
+    Component: <HOME />,
   },
 ];

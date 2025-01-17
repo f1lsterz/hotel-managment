@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { registration } from "../api/userApi";
 
 const RegistrationForm: React.FC = () => {
@@ -7,6 +8,7 @@ const RegistrationForm: React.FC = () => {
     email: "",
     password: "",
   });
+  const navigate = useNavigate();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -19,6 +21,8 @@ const RegistrationForm: React.FC = () => {
       await registration(formData);
       setFormData({ name: "", email: "", password: "" });
     } catch (error) {}
+
+    navigate("/home");
   };
 
   return (
@@ -79,8 +83,19 @@ const RegistrationForm: React.FC = () => {
         type="submit"
         className="w-full bg-indigo-600 text-white py-2 px-4 rounded-md hover:bg-indigo-700 transition"
       >
-        Register
+        Sign up
       </button>
+
+      <div className="text-sm text-center mt-4">
+        Already have an account?{" "}
+        <button
+          type="button"
+          className="text-indigo-600 hover:underline"
+          onClick={() => navigate("/authorization")}
+        >
+          Sign in
+        </button>
+      </div>
     </form>
   );
 };
