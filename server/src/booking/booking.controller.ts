@@ -7,6 +7,7 @@ import {
   Param,
   Query,
   Controller,
+  UseGuards,
 } from "@nestjs/common";
 import { BookingService } from "./booking.service";
 import { CreateBookingDto } from "./dto/createBookingDto";
@@ -15,20 +16,21 @@ import { FilterBookingDto } from "./dto/filterBookingDto";
 import { Access } from "src/common/decorators/access.decorator";
 import { Roles } from "src/common/types/roles.enum";
 import { BookingByIdPipe } from "src/common/pipes/BookingById";
+import { JwtAuthGuard } from "src/common/guards/jwtAuth.guard";
 
 @Controller("booking")
 export class BookingController {
   constructor(private readonly bookingService: BookingService) {}
 
   @Post()
-  @Access(Roles.Admin, Roles.Receptionist, Roles.User)
+  @UseGuards(JwtAuthGuard)
   async createBooking(@Body() createBookingDto: CreateBookingDto) {
     const booking = await this.bookingService.createBooking(createBookingDto);
     return booking;
   }
 
   @Get(":id")
-  @Access(Roles.Admin, Roles.Receptionist, Roles.User)
+  @UseGuards(JwtAuthGuard)
   async getBookingById(@Param("id", BookingByIdPipe) id: number) {
     return this.bookingService.getBookingById(id);
   }
@@ -61,7 +63,7 @@ export class BookingController {
   }
 
   @Put(":id/cancel")
-  @Access(Roles.Admin, Roles.Receptionist, Roles.User)
+  @UseGuards(JwtAuthGuard)
   async cancelBooking(@Param("id", BookingByIdPipe) id: number) {
     const cancelledBooking = await this.bookingService.cancelBooking(id);
     return { message: "Booking cancelled successfully", cancelledBooking };

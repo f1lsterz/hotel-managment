@@ -8,6 +8,7 @@ import {
   Delete,
   HttpException,
   HttpStatus,
+  UseGuards,
 } from "@nestjs/common";
 import { ReviewService } from "./review.service";
 import { CreateReviewDto } from "./dto/createReviewDto";
@@ -17,13 +18,14 @@ import { Access } from "src/common/decorators/access.decorator";
 import { RoomByIdPipe } from "src/common/pipes/RoomById";
 import { UserByIdPipe } from "src/common/pipes/UserById";
 import { ReviewByIdPipe } from "src/common/pipes/ReviewById";
+import { JwtAuthGuard } from "src/common/guards/jwtAuth.guard";
 
 @Controller("review")
 export class ReviewController {
   constructor(private readonly reviewService: ReviewService) {}
 
   @Post()
-  @Access(Roles.Admin, Roles.Receptionist, Roles.User)
+  @UseGuards(JwtAuthGuard)
   async createReview(@Body() createReviewDto: CreateReviewDto) {
     const review = await this.reviewService.createReview(createReviewDto);
     return review;
@@ -36,7 +38,7 @@ export class ReviewController {
   }
 
   @Get("user/:userId")
-  @Access(Roles.Admin, Roles.Receptionist, Roles.User)
+  @UseGuards(JwtAuthGuard)
   async getReviewsForUser(@Param("userId", UserByIdPipe) userId: number) {
     const reviews = await this.reviewService.getReviewsForUser(userId);
     return reviews;
@@ -49,7 +51,7 @@ export class ReviewController {
   }
 
   @Patch(":id")
-  @Access(Roles.Admin, Roles.Receptionist, Roles.User)
+  @UseGuards(JwtAuthGuard)
   async updateReview(
     @Param("id", ReviewByIdPipe) id: number,
     @Body() updateReviewDto: UpdateReviewDto
@@ -62,7 +64,7 @@ export class ReviewController {
   }
 
   @Delete(":id")
-  @Access(Roles.Admin, Roles.Receptionist, Roles.User)
+  @UseGuards(JwtAuthGuard)
   async deleteReview(@Param("id", ReviewByIdPipe) id: number) {
     try {
       await this.reviewService.deleteReview(id);

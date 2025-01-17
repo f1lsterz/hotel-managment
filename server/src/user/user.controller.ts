@@ -6,6 +6,7 @@ import {
   Param,
   Patch,
   Query,
+  UseGuards,
 } from "@nestjs/common";
 import { UserService } from "./user.service";
 import { FindUserDto } from "./dto/findUserDto";
@@ -13,6 +14,7 @@ import { UpdateUserDto } from "./dto/updateUserDto";
 import { Access } from "src/common/decorators/access.decorator";
 import { Roles } from "src/common/types/roles.enum";
 import { UserByIdPipe } from "src/common/pipes/UserById";
+import { JwtAuthGuard } from "src/common/guards/jwtAuth.guard";
 
 @Controller("user")
 export class UserController {
@@ -31,7 +33,7 @@ export class UserController {
   }
 
   @Patch(":id")
-  @Access(Roles.Admin, Roles.Receptionist, Roles.User)
+  @UseGuards(JwtAuthGuard)
   async updateUser(
     @Param("id", UserByIdPipe) id: number,
     @Body() updateUserDto: UpdateUserDto
