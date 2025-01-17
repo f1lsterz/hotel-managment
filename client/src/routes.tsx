@@ -1,5 +1,6 @@
-import RegistrationPage from "./pages/Registration";
+import Registration from "./pages/Registration";
 import {
+  AUTHORIZATION_ROUTE,
   HOME_ROUTE,
   PROFILE_ROUTE,
   REGISTRATION_ROUTE,
@@ -8,6 +9,10 @@ import {
 export const publicRoutes: Array<{ path: string; Component: JSX.Element }> = [
   {
     path: REGISTRATION_ROUTE,
-    Component: <RegistrationPage />,
+    Component: <Registration />,
+  },
+  {
+    path: AUTHORIZATION_ROUTE,
+    Component: <Authorization />,
   },
 ];

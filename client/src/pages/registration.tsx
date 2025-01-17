@@ -1,6 +1,6 @@
 import RegistrationForm from "../components/RegistrationForm";
 
-const RegistrationPage: React.FC = () => {
+const Registration: React.FC = () => {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
       <div className="w-full max-w-md bg-white shadow-md rounded-lg p-6">
@@ -11,4 +11,4 @@ const RegistrationPage: React.FC = () => {
   );
 };
 
-export default RegistrationPage;
+export default Registration;
