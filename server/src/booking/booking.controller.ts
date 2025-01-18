@@ -18,7 +18,7 @@ import { Roles } from "src/common/types/roles.enum";
 import { BookingByIdPipe } from "src/common/pipes/BookingById";
 import { JwtAuthGuard } from "src/common/guards/jwtAuth.guard";
 
-@Controller("booking")
+@Controller("/booking")
 export class BookingController {
   constructor(private readonly bookingService: BookingService) {}
 

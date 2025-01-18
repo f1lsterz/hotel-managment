@@ -24,10 +24,6 @@ export class UserService {
       ? await this.prisma.user.findUnique({ where: { id } })
       : await this.prisma.user.findUnique({ where: { email } });
 
-    if (!user) {
-      throw new NotFoundException("User not found");
-    }
-
     return user;
   }
 
@@ -49,10 +45,15 @@ export class UserService {
   }
 
   async createUser(createUserDto: CreateUserDto) {
-    const { email, password, name, role, photoUrl } = createUserDto;
+    const { email, password, name, role } = createUserDto;
+
+    const existingUser = await this.findByEmailOrId({ email });
+    if (existingUser) {
+      throw new BadRequestException("User with this email already exists");
+    }
 
     const user = await this.prisma.user.create({
-      data: { email, password, name, role, photoUrl },
+      data: { email, password, name, role },
     });
 
     if (!user) {

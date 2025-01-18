@@ -1,12 +1,7 @@
-import {
-  ConflictException,
-  Inject,
-  Injectable,
-  UnauthorizedException,
-} from "@nestjs/common";
+import { Inject, Injectable, UnauthorizedException } from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
 import { UserService } from "src/user/user.service";
-import bcrypt from "bcrypt";
+import * as bcrypt from "bcrypt";
 import { LoginDto } from "./dto/loginDto";
 import { RegistrationDto } from "./dto/registrationDto";
 import { GoogleUser } from "src/common/types/googleUser";
@@ -52,19 +47,15 @@ export class AuthService {
   async registration(
     registrationDto: RegistrationDto
   ): Promise<{ accessToken: string }> {
+    console.log(registrationDto);
     const { email, password, name, role } = registrationDto;
-
-    const existingUser = await this.userService.findByEmailOrId({ email });
-    if (existingUser) {
-      throw new ConflictException("Email is already registered");
-    }
 
     const hashedPassword = await bcrypt.hash(password, 10);
     const newUser = await this.userService.createUser({
       email,
       password: hashedPassword,
       name,
-      role,
+      role: role || "USER",
     });
 
     return this.generateAccessToken(newUser);

@@ -14,7 +14,7 @@ import { RegistrationDto } from "./dto/registrationDto";
 import { GoogleOAuthGuard } from "src/common/guards/googleOAuth.guard";
 import { JwtAuthGuard } from "src/common/guards/jwtAuth.guard";
 
-@Controller("auth")
+@Controller("/auth")
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
@@ -49,7 +49,6 @@ export class AuthController {
       sameSite: "strict",
       maxAge: 24 * 60 * 60 * 1000,
     });
-
     return { message: "Registration successful" };
   }
 

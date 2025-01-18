@@ -1,4 +1,5 @@
 import { Role } from "@prisma/client";
+import { Transform } from "class-transformer";
 import {
   IsEmail,
   IsEnum,
@@ -23,6 +24,7 @@ export class RegistrationDto {
   name?: string;
 
   @IsEnum(Role)
-  @IsNotEmpty()
-  role: Role;
+  @IsOptional()
+  @Transform(({ value }) => value || Role.USER)
+  role?: Role;
 }
