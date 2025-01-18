@@ -19,7 +19,15 @@ import { RolesGuard } from "src/common/guards/role.guard";
     PassportModule,
   ],
   controllers: [AuthController],
-  providers: [AuthService, JwtStrategy, GoogleStrategy, UserByIdPipe],
+  providers: [
+    AuthService,
+    JwtStrategy,
+    GoogleStrategy,
+    UserByIdPipe,
+    GoogleOAuthGuard,
+    JwtAuthGuard,
+    RolesGuard,
+  ],
   exports: [
     AuthService,
     GoogleOAuthGuard,

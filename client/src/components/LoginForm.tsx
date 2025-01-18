@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { login } from "../api/userApi";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const LoginForm: React.FC = () => {
   const [formData, setFormData] = useState({
@@ -18,10 +20,14 @@ const LoginForm: React.FC = () => {
 
     try {
       await login(formData);
+      toast.success("Login successful! Redirecting to home...");
       setFormData({ email: "", password: "" });
-    } catch (error) {}
-
-    navigate("/home");
+      navigate("/home");
+    } catch (error: any) {
+      toast.error(
+        error.response?.data?.message || "Login failed. Please try again."
+      );
+    }
   };
 
   return (

@@ -62,9 +62,6 @@ export class DiscountService {
       where: {
         isActive: true,
       },
-      orderBy: {
-        createdAt: "desc",
-      },
     });
 
     return discounts;

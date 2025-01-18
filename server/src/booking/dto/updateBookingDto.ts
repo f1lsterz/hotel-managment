@@ -1,11 +1,4 @@
-import {
-  IsOptional,
-  IsInt,
-  IsDate,
-  IsEnum,
-  IsArray,
-  IsNumber,
-} from "class-validator";
+import { IsOptional, IsInt, IsDate, IsEnum, IsNumber } from "class-validator";
 import { BookingStatus } from "@prisma/client";
 
 export class UpdateBookingDto {
@@ -28,9 +21,4 @@ export class UpdateBookingDto {
   @IsOptional()
   @IsEnum(BookingStatus)
   status?: BookingStatus;
-
-  @IsOptional()
-  @IsArray()
-  @IsInt({ each: true })
-  serviceIds?: number[];
 }

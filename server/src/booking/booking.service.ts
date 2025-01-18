@@ -10,8 +10,7 @@ export class BookingService {
   constructor(private readonly prisma: PrismaService) {}
 
   async createBooking(createBookingDto: CreateBookingDto): Promise<Booking> {
-    const { userId, roomId, checkIn, checkOut, totalAmount, serviceIds } =
-      createBookingDto;
+    const { userId, roomId, checkIn, checkOut, totalAmount } = createBookingDto;
 
     const isAvailable = await this.checkRoomAvailability(
       roomId,
@@ -30,11 +29,7 @@ export class BookingService {
         checkOut,
         totalAmount,
         status: BookingStatus.PENDING,
-        services: {
-          create: serviceIds?.map((serviceId) => ({ serviceId })) || [],
-        },
       },
-      include: { services: true },
     });
 
     return booking;
@@ -43,7 +38,6 @@ export class BookingService {
   async getBookingById(id: number): Promise<Booking> {
     const booking = await this.prisma.booking.findUnique({
       where: { id },
-      include: { services: true },
     });
     if (!booking) {
       throw new Error("Booking not found.");
@@ -62,7 +56,6 @@ export class BookingService {
         checkIn: checkIn ? { gte: checkIn } : undefined,
         checkOut: checkOut ? { lte: checkOut } : undefined,
       },
-      include: { services: true },
     });
 
     return bookings;
@@ -74,8 +67,7 @@ export class BookingService {
   ): Promise<Booking> {
     const existingBooking = await this.getBookingById(id);
 
-    const { roomId, checkIn, checkOut, totalAmount, status, serviceIds } =
-      updateBookingDto;
+    const { roomId, checkIn, checkOut, totalAmount, status } = updateBookingDto;
 
     if (roomId || checkIn || checkOut) {
       const isAvailable = await this.checkRoomAvailability(
@@ -97,14 +89,7 @@ export class BookingService {
         checkOut,
         totalAmount,
         status,
-        services: serviceIds
-          ? {
-              deleteMany: {},
-              create: serviceIds.map((serviceId) => ({ serviceId })),
-            }
-          : undefined,
       },
-      include: { services: true },
     });
 
     return updatedBooking;

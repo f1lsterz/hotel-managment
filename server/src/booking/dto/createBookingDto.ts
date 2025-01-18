@@ -1,10 +1,4 @@
-import {
-  IsNotEmpty,
-  IsOptional,
-  IsPositive,
-  IsDate,
-  IsInt,
-} from "class-validator";
+import { IsNotEmpty, IsPositive, IsDate, IsInt } from "class-validator";
 
 export class CreateBookingDto {
   @IsInt()
@@ -26,8 +20,4 @@ export class CreateBookingDto {
   @IsPositive()
   @IsNotEmpty()
   totalAmount: number;
-
-  @IsOptional()
-  @IsInt({ each: true })
-  serviceIds?: number[];
 }

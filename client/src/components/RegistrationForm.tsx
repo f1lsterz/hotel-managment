@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { registration } from "../api/userApi";
+import { toast } from "react-toastify";
 
 const RegistrationForm: React.FC = () => {
   const [formData, setFormData] = useState({
@@ -19,10 +20,15 @@ const RegistrationForm: React.FC = () => {
 
     try {
       await registration(formData);
+      toast.success("Registration successful! Redirecting to home...");
       setFormData({ name: "", email: "", password: "" });
-    } catch (error) {}
-
-    navigate("/home");
+      navigate("/home");
+    } catch (error: any) {
+      toast.error(
+        error.response?.data?.message ||
+          "Registration failed. Please try again."
+      );
+    }
   };
 
   return (
