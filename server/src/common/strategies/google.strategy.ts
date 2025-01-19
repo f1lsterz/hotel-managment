@@ -1,7 +1,7 @@
 import { Inject, Injectable } from "@nestjs/common";
 import { ConfigType } from "@nestjs/config";
 import { PassportStrategy } from "@nestjs/passport";
-import { Strategy, VerifyCallback } from "passport-google-oauth20";
+import { Profile, Strategy, VerifyCallback } from "passport-google-oauth20";
 import { AuthService } from "src/auth/auth.service";
 import config from "src/config/config";
 
@@ -22,7 +22,7 @@ export class GoogleStrategy extends PassportStrategy(Strategy, "google") {
   async validate(
     _accessToken: string,
     _refreshToken: string,
-    profile: any,
+    profile: Profile,
     done: VerifyCallback
   ): Promise<any> {
     const { emails, displayName, photos } = profile;
