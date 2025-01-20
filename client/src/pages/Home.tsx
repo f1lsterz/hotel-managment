@@ -61,6 +61,74 @@ const Home = () => {
             </Link>
           </div>
         </div>
+
+        <div className="bg-white shadow-lg rounded-lg overflow-hidden">
+          <img
+            src="https://via.placeholder.com/300x200"
+            alt="Room"
+            className="w-full h-48 object-cover"
+          />
+          <div className="p-4">
+            <h2 className="text-xl font-semibold">Suite</h2>
+            <p className="text-gray-600 mt-2">
+              A luxurious suite with breathtaking views and top-tier amenities.
+            </p>
+            <Link to="/rooms" className="mt-4 text-blue-600 hover:underline">
+              Explore Rooms
+            </Link>
+          </div>
+        </div>
+
+        <div className="bg-white shadow-lg rounded-lg overflow-hidden">
+          <img
+            src="https://via.placeholder.com/300x200"
+            alt="Room"
+            className="w-full h-48 object-cover"
+          />
+          <div className="p-4">
+            <h2 className="text-xl font-semibold">Suite</h2>
+            <p className="text-gray-600 mt-2">
+              A luxurious suite with breathtaking views and top-tier amenities.
+            </p>
+            <Link to="/rooms" className="mt-4 text-blue-600 hover:underline">
+              Explore Rooms
+            </Link>
+          </div>
+        </div>
+
+        <div className="bg-white shadow-lg rounded-lg overflow-hidden">
+          <img
+            src="https://via.placeholder.com/300x200"
+            alt="Room"
+            className="w-full h-48 object-cover"
+          />
+          <div className="p-4">
+            <h2 className="text-xl font-semibold">Suite</h2>
+            <p className="text-gray-600 mt-2">
+              A luxurious suite with breathtaking views and top-tier amenities.
+            </p>
+            <Link to="/rooms" className="mt-4 text-blue-600 hover:underline">
+              Explore Rooms
+            </Link>
+          </div>
+        </div>
+
+        <div className="bg-white shadow-lg rounded-lg overflow-hidden">
+          <img
+            src="https://via.placeholder.com/300x200"
+            alt="Room"
+            className="w-full h-48 object-cover"
+          />
+          <div className="p-4">
+            <h2 className="text-xl font-semibold">Suite</h2>
+            <p className="text-gray-600 mt-2">
+              A luxurious suite with breathtaking views and top-tier amenities.
+            </p>
+            <Link to="/rooms" className="mt-4 text-blue-600 hover:underline">
+              Explore Rooms
+            </Link>
+          </div>
+        </div>
       </div>
     </div>
   );

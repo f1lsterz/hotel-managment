@@ -2,10 +2,10 @@ import { Link } from "react-router-dom";
 
 const Header = () => {
   return (
-    <header className="bg-blue-600 text-white py-4 px-6 shadow-md">
+    <header className="bg-blue-600 text-white py-4 px-6 shadow-md h-28">
       <nav className="flex justify-between items-center">
         <h1 className="text-lg font-bold">
-          <Link to="/" className="hover:text-gray-200">
+          <Link to="/home" className="hover:text-gray-200">
             Hotel Management
           </Link>
         </h1>
