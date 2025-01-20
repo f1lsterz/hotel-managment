@@ -24,6 +24,7 @@ export class AuthController {
     @Res({ passthrough: true }) res: Response
   ): Promise<{ message: string }> {
     const { accessToken } = await this.authService.login(loginDto);
+    console.log(accessToken);
 
     res.cookie("accessToken", accessToken, {
       httpOnly: true,
@@ -64,6 +65,7 @@ export class AuthController {
   ): Promise<{ message: string }> {
     const user = req.user;
     const accessToken = this.authService.generateAccessToken(user);
+    console.log(accessToken);
 
     res.cookie("accessToken", accessToken, {
       httpOnly: true,

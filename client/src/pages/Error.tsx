@@ -1,7 +1,11 @@
 import { useNavigate } from "react-router-dom";
 import { HOME_ROUTE } from "../utils/constants/routes";
 
-const ErrorPage = ({ message: string }) => {
+interface ErrorPageProps {
+  message?: string;
+}
+
+const ErrorPage: React.FC<ErrorPageProps> = ({ message }) => {
   const navigate = useNavigate();
 
   const handleBackClick = () => {
@@ -9,12 +13,15 @@ const ErrorPage = ({ message: string }) => {
   };
 
   return (
-    <div className={styles.errorContainer}>
-      <h1 className={styles.errorTitle}>Oops!</h1>
-      <p className={styles.errorMessage}>
+    <div className="flex flex-col items-center justify-center h-screen bg-gray-100">
+      <h1 className="text-4xl font-bold text-red-500 mb-4">Oops!</h1>
+      <p className="text-lg text-gray-700 mb-6">
         {message || "Something went wrong."}
       </p>
-      <button onClick={handleBackClick} className={styles.backButton}>
+      <button
+        onClick={handleBackClick}
+        className="px-6 py-3 bg-blue-500 text-white font-medium rounded-lg shadow-md hover:bg-blue-600 transition duration-300"
+      >
         Back
       </button>
     </div>
