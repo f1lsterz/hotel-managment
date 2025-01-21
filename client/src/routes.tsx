@@ -8,7 +8,6 @@ import {
   HOME_ROUTE,
   PROFILE_ROUTE,
   REGISTRATION_ROUTE,
-  ROOM_ROUTE,
   ROOMS_ROUTE,
 } from "./utils/constants/routes";
 

@@ -26,3 +26,13 @@ export const roomAPI = {
     await $authHost.delete(`/room/${id}`);
   },
 };
+
+export const getAllRooms = async (filters?: Partial<Room>): Promise<Room[]> => {
+  const { data } = await $host.get<Room[]>("/room", { params: filters });
+  return data;
+};
+
+export const getRoomById = async (id: number): Promise<Room> => {
+  const { data } = await $host.get<Room>(`/room/${id}`);
+  return data;
+};
