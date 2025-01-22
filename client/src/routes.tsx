@@ -1,5 +1,6 @@
 import Authorization from "./pages/Authorization";
 import Home from "./pages/Home";
+import Profile from "./pages/Profile";
 import Registration from "./pages/Registration";
 import Room from "./pages/Room";
 import Rooms from "./pages/Rooms";
@@ -31,5 +32,12 @@ export const publicRoutes: Array<{ path: string; Component: JSX.Element }> = [
   {
     path: ROOMS_ROUTE + "/:roomId",
     Component: <Room />,
+  },
+];
+
+export const authRoutes: Array<{ path: string; Component: JSX.Element }> = [
+  {
+    path: PROFILE_ROUTE,
+    Component: <Profile />,
   },
 ];
