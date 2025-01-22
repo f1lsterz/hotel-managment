@@ -3,11 +3,12 @@ import {
   SubscribeMessage,
   MessageBody,
   WebSocketServer,
+  ConnectedSocket,
 } from "@nestjs/websockets";
 import { ChatService } from "./chat.service";
 import { CreateMessageDto } from "./dto/createMessageDto";
 import { UpdateMessageDto } from "./dto/updateMessageDto";
-import { Server } from "socket.io";
+import { Server, Socket } from "socket.io";
 
 @WebSocketGateway(Number(process.env.CHAT_PORT) || 3001, {
   cors: {
@@ -30,9 +31,9 @@ export class ChatGateway {
   }
 
   @SubscribeMessage("findAllMessages")
-  async findAllMessages() {
+  async findAllMessages(@ConnectedSocket() client: Socket) {
     const messages = await this.chatService.findAllMessages();
-    return messages;
+    client.emit("findAllMessages", messages);
   }
 
   @SubscribeMessage("updateMessage")
