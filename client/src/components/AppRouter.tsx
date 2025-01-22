@@ -10,6 +10,9 @@ const AppRouter = () => {
         <Route key={path} path={path} element={<Layout>{Component}</Layout>} />
       ))}
       {authRoutes.map(({ path, Component }) => (
+        <Route key={path} path={path} element={<Layout>{Component}</Layout>} />
+      ))}
+      {/* {authRoutes.map(({ path, Component }) => (
         <Route
           key={path}
           path={path}
@@ -21,7 +24,7 @@ const AppRouter = () => {
             )
           }
         />
-      ))}
+      ))} */}
       <Route path="*" element={<ErrorPage message="Page not found" />} />
     </Routes>
   );
