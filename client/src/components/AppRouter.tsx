@@ -1,7 +1,8 @@
-import { Navigate, Route, Routes } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 import Layout from "./Layout";
 import { authRoutes, publicRoutes } from "../routes";
 import ErrorPage from "../pages/Error";
+import PrivateRoute from "./PrivateRoute";
 
 const AppRouter = () => {
   return (
@@ -9,22 +10,19 @@ const AppRouter = () => {
       {publicRoutes.map(({ path, Component }) => (
         <Route key={path} path={path} element={<Layout>{Component}</Layout>} />
       ))}
+
       {authRoutes.map(({ path, Component }) => (
-        <Route key={path} path={path} element={<Layout>{Component}</Layout>} />
-      ))}
-      {/* {authRoutes.map(({ path, Component }) => (
         <Route
           key={path}
           path={path}
           element={
-            isAuth ? (
+            <PrivateRoute>
               <Layout>{Component}</Layout>
-            ) : (
-              <Navigate to="/authorization" replace />
-            )
+            </PrivateRoute>
           }
         />
-      ))} */}
+      ))}
+
       <Route path="*" element={<ErrorPage message="Page not found" />} />
     </Routes>
   );
