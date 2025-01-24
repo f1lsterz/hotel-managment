@@ -4,11 +4,8 @@ model Room {
   type        RoomType
   status      RoomStatus @default(AVAILABLE)
   price       Float      @default(0) 
-  isAvailable Boolean?   @default(true)
-  services    RoomToService[]
   bookings    Booking[]
   reviews     Review[]
-  discounts   RoomDiscount[]
 
   @@index([type, status])
 }
@@ -23,8 +20,8 @@ enum RoomStatus {
 enum RoomType {
   SINGLE
   DOUBLE
-  SUITE
   DELUXE
+  ECONOMY
 }
 
 model Booking {
@@ -38,6 +35,7 @@ model Booking {
   totalAmount Float     @default(0)
   status      BookingStatus @default(PENDING)
   payment     Payment? 
+  services    BookingToService[]
 
   @@index([userId])
   @@index([roomId, status])
@@ -56,42 +54,17 @@ model Service {
   name        String
   description String?
   price       Float
-  rooms       RoomToService[]
+  bookings    BookingToService[]
 
   @@index([name])
 }
 
-
-model Discount {
-  id          Int       @id @default(autoincrement())
-  name        String
-  description String?
-  percentage  Float
-  startDate   DateTime
-  endDate     DateTime
-  isActive    Boolean   @default(true)
-  rooms       RoomDiscount[]
-
-  @@index([isActive])
-  @@index([startDate, endDate])
-}
-
-model RoomDiscount {
-  roomId     Int
-  discountId Int
-  room       Room       @relation(fields: [roomId], references: [id], onDelete: Cascade)
-  discount   Discount   @relation(fields: [discountId], references: [id], onDelete: Cascade)
-
-  @@id([roomId, discountId]) 
-  @@map("room_discounts")
-}
-
-model RoomToService {
-  roomId    Int
+model BookingToService {
+  bookingId    Int
   serviceId Int
-  room      Room    @relation(fields: [roomId], references: [id], onDelete: Cascade)
+  booking   Booking    @relation(fields: [bookingId], references: [id], onDelete: Cascade)
   service   Service @relation(fields: [serviceId], references: [id], onDelete: Cascade)
 
-  @@id([roomId, serviceId])
-  @@map("room_services")
+  @@id([bookingId, serviceId])
+  @@map("booking_services")
 }

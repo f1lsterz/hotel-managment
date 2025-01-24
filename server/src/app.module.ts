@@ -5,7 +5,6 @@ import { RoomModule } from "./room/room.module";
 import { BookingModule } from "./booking/booking.module";
 import { PaymentModule } from "./payment/payment.module";
 import { ReviewModule } from "./review/review.module";
-import { DiscountModule } from "./discount/discount.module";
 import { NotificationModule } from "./notification/notification.module";
 import { ReportModule } from "./report/report.module";
 import { ChatModule } from "./chat/chat.module";
@@ -24,7 +23,6 @@ import config from "./config/config";
     BookingModule,
     PaymentModule,
     ReviewModule,
-    DiscountModule,
     NotificationModule,
     ReportModule,
     ChatModule,
