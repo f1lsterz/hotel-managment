@@ -4,12 +4,14 @@ import Profile from "./pages/Profile";
 import Registration from "./pages/Registration";
 import Room from "./pages/Room";
 import Rooms from "./pages/Rooms";
+import Services from "./pages/Services";
 import {
   AUTHORIZATION_ROUTE,
   HOME_ROUTE,
   PROFILE_ROUTE,
   REGISTRATION_ROUTE,
   ROOMS_ROUTE,
+  SERVICES_ROUTE,
 } from "./utils/constants/routes";
 
 export const publicRoutes: Array<{ path: string; Component: JSX.Element }> = [
@@ -32,6 +34,10 @@ export const publicRoutes: Array<{ path: string; Component: JSX.Element }> = [
   {
     path: ROOMS_ROUTE + "/:roomType",
     Component: <Room />,
+  },
+  {
+    path: SERVICES_ROUTE,
+    Component: <Services />,
   },
 ];
 

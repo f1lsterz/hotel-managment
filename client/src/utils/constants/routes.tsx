@@ -3,3 +3,4 @@ export const REGISTRATION_ROUTE = "/registration";
 export const AUTHORIZATION_ROUTE = "/authorization";
 export const ROOMS_ROUTE = "/rooms";
 export const PROFILE_ROUTE = "/profile";
+export const SERVICES_ROUTE = "/services";

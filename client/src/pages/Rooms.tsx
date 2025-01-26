@@ -6,25 +6,25 @@ import room1 from "../assets/images/room_types/single/room1.jpg";
 
 const mockRooms = [
   {
-    type: "Single",
+    type: "SINGLE",
     price: 80,
     image: room1,
     description: "A cozy room for solo travelers.",
   },
   {
-    type: "Double",
+    type: "DOUBLE",
     price: 120,
     image: room1,
     description: "Perfect for couples or friends.",
   },
   {
-    type: "Deluxe",
+    type: "DELUXE",
     price: 200,
     image: room1,
     description: "Luxury at its finest.",
   },
   {
-    type: "Economy",
+    type: "ECONOMY",
     price: 60,
     image: room1,
     description: "Economy.",

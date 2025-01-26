@@ -11,11 +11,9 @@ export const getAllRooms = async (filters?: Partial<Room>): Promise<Room[]> => {
   }
 };
 
-export const getAllRoomsByType = async (): Promise<Room[]> => {
+export const getAllRoomsByType = async (type: string): Promise<Room[]> => {
   try {
-    console.log("fdsfsd");
-    const response = await $host.get<Room[]>("/rooms/types");
-    console.log(response.data);
+    const response = await $host.get<Room[]>(`/rooms/${type}`);
     return response.data;
   } catch (error) {
     console.error("Error fetching rooms by type:", error);
