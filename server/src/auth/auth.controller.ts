@@ -64,7 +64,7 @@ export class AuthController {
     @Res({ passthrough: true }) res: Response
   ): Promise<{ message: string }> {
     const user = req.user;
-    const accessToken = this.authService.generateAccessToken(user);
+    const { accessToken } = await this.authService.generateAccessToken(user);
     console.log(accessToken);
 
     res.cookie("accessToken", accessToken, {

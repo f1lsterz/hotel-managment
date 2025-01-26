@@ -43,4 +43,12 @@ export class RoomService {
 
     return this.prisma.room.count({ where });
   }
+
+  async findAllRoomsByType(type: RoomType): Promise<Room[]> {
+    return this.prisma.room.findMany({
+      where: {
+        type,
+      },
+    });
+  }
 }

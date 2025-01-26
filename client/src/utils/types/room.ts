@@ -8,8 +8,8 @@ export enum RoomStatus {
 export enum RoomType {
   SINGLE = "SINGLE",
   DOUBLE = "DOUBLE",
-  SUITE = "SUITE",
   DELUXE = "DELUXE",
+  ECONOMY = "ECONOMY",
 }
 
 export interface Room {
@@ -18,8 +18,4 @@ export interface Room {
   type: RoomType;
   status: RoomStatus;
   price: number;
-  isAvailable?: boolean;
-  features?: string[];
-  createdAt: string;
-  updatedAt: string;
 }

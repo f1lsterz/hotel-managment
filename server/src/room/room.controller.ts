@@ -16,8 +16,9 @@ import { Room, RoomType } from "@prisma/client";
 import { Access } from "src/common/decorators/access.decorator";
 import { Roles } from "src/common/types/roles.enum";
 import { RoomByIdPipe } from "src/common/pipes/RoomById";
+import { RoomTypeValidationPipe } from "src/common/pipes/RoomTypeValidation";
 
-@Controller("room")
+@Controller("/rooms")
 export class RoomController {
   constructor(private readonly roomService: RoomService) {}
 
@@ -45,6 +46,13 @@ export class RoomController {
   @Get()
   async findAllRooms(@Query() filters: RoomFiltersDto): Promise<Room[]> {
     return await this.roomService.findAllRooms(filters);
+  }
+
+  @Get(":type")
+  async findAllRoomsByTypes(
+    @Param("type", RoomTypeValidationPipe) type: RoomType
+  ): Promise<Room[]> {
+    return await this.roomService.findAllRoomsByType(type);
   }
 
   @Get(":id")

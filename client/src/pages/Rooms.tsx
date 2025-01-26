@@ -1,24 +1,38 @@
 import rooms_image from "../assets/images/rooms.jpg";
 import { Room } from "../utils/types/room";
-import { useEffect, useState } from "react";
-import { getAllRooms } from "../api/roomApi";
+import { useState } from "react";
 import RoomCard from "../components/RoomCard";
+import room1 from "../assets/images/room_types/single/room1.jpg";
+
+const mockRooms = [
+  {
+    type: "Single",
+    price: 80,
+    image: room1,
+    description: "A cozy room for solo travelers.",
+  },
+  {
+    type: "Double",
+    price: 120,
+    image: room1,
+    description: "Perfect for couples or friends.",
+  },
+  {
+    type: "Deluxe",
+    price: 200,
+    image: room1,
+    description: "Luxury at its finest.",
+  },
+  {
+    type: "Economy",
+    price: 60,
+    image: room1,
+    description: "Economy.",
+  },
+];
 
 const Rooms: React.FC = () => {
-  const [rooms, setRooms] = useState<Room[]>([]);
-
-  useEffect(() => {
-    const fetchRooms = async () => {
-      try {
-        const data = await getAllRooms();
-        setRooms(data);
-      } catch (error) {
-        console.error("Error fetching rooms:", error);
-      }
-    };
-
-    fetchRooms();
-  }, []);
+  const [rooms, setRooms] = useState(mockRooms);
 
   return (
     <div className="flex flex-col">
@@ -37,11 +51,10 @@ const Rooms: React.FC = () => {
       <div className="grid grid-cols-3 gap-6 p-6">
         {rooms.map((room) => (
           <RoomCard
-            key={room.id}
-            id={room.id}
-            name={room.number ? `Room ${room.number}` : "Unnamed Room"}
-            description={`Type: ${room.type}, Price: $${room.price}`}
-            image="https://via.placeholder.com/300x200"
+            key={room.type}
+            name={room.type}
+            description={`${room.description} Price: $${room.price}`}
+            image={room.image}
           />
         ))}
       </div>

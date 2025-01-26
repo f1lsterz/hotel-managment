@@ -30,7 +30,7 @@ export const publicRoutes: Array<{ path: string; Component: JSX.Element }> = [
     Component: <Rooms />,
   },
   {
-    path: ROOMS_ROUTE + "/:roomId",
+    path: ROOMS_ROUTE + "/:roomType",
     Component: <Room />,
   },
 ];
