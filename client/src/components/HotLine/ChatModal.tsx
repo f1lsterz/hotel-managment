@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { io, Socket } from "socket.io-client";
 import { Message } from "../../utils/types/message";
+import { useUserStore } from "../../stores/user";
 
 interface ChatModalProps {
   isOpen: boolean;
@@ -8,15 +9,19 @@ interface ChatModalProps {
 }
 
 const ChatModal: React.FC<ChatModalProps> = ({ isOpen, onClose }) => {
+  const { user } = useUserStore();
   const [socket, setSocket] = useState<Socket | null>(null);
   const [messages, setMessages] = useState<Message[]>([]);
   const [newMessage, setNewMessage] = useState<string>("");
 
   useEffect(() => {
     if (isOpen) {
-      const socketInstance = io("http://localhost:3001", {
-        transports: ["websocket"],
-      });
+      const socketInstance = io(
+        import.meta.env.VITE_CHAT_URL || "http://localhost:3001",
+        {
+          transports: ["websocket"],
+        }
+      );
       setSocket(socketInstance);
 
       socketInstance.emit("findAllMessages");
@@ -38,7 +43,8 @@ const ChatModal: React.FC<ChatModalProps> = ({ isOpen, onClose }) => {
 
   const handleSendMessage = () => {
     if (newMessage.trim() && socket) {
-      socket.emit("createMessage", { content: newMessage, senderId: 1 });
+      socket.emit("createMessage", { content: newMessage, senderId: user?.id });
+      console.log("Sent message:", { content: newMessage, senderId: user?.id });
       setNewMessage("");
     }
   };
@@ -60,7 +66,7 @@ const ChatModal: React.FC<ChatModalProps> = ({ isOpen, onClose }) => {
           {messages.length > 0 ? (
             messages.map((message) => (
               <div key={message.id} className="mb-2">
-                <strong>{message.sender.name}:</strong> {message.content}
+                <strong>{message.id}:</strong> {message.content}
               </div>
             ))
           ) : (

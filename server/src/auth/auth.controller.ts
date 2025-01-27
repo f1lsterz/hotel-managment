@@ -62,7 +62,7 @@ export class AuthController {
   async googleCallBack(
     @Req() req: Request,
     @Res({ passthrough: true }) res: Response
-  ): Promise<{ message: string }> {
+  ): Promise<void> {
     const user = req.user;
     const { accessToken } = await this.authService.generateAccessToken(user);
     console.log(accessToken);
@@ -74,7 +74,7 @@ export class AuthController {
       maxAge: 24 * 60 * 60 * 1000,
     });
 
-    return { message: "Google login successful" };
+    res.redirect(`${process.env.CLIENT_URL}/home`);
   }
 
   @Post("logout")

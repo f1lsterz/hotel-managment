@@ -14,6 +14,8 @@ import { Server, Socket } from "socket.io";
   cors: {
     origin:
       process.env.SERVER_URL + process.env.CHAT_PORT || "http://localhost:3001",
+    methods: ["GET", "POST"],
+    credentials: true,
   },
 })
 export class ChatGateway {
