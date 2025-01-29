@@ -33,7 +33,9 @@ export class AuthService {
     });
   }
 
-  async login(loginDto: LoginDto): Promise<{ accessToken: string }> {
+  async login(
+    loginDto: LoginDto
+  ): Promise<{ accessToken: string; user: User }> {
     const { email, password } = loginDto;
     const user = await this.userService.findByEmailOrId({ email });
 
@@ -41,24 +43,28 @@ export class AuthService {
       throw new UnauthorizedException("Invalid email or password");
     }
 
-    return this.generateAccessToken(user);
+    const accessToken = await this.generateAccessToken(user);
+
+    return { user, accessToken };
   }
 
   async registration(
     registrationDto: RegistrationDto
-  ): Promise<{ accessToken: string }> {
+  ): Promise<{ accessToken: string; user: User }> {
     console.log(registrationDto);
     const { email, password, name, role } = registrationDto;
 
     const hashedPassword = await bcrypt.hash(password, 10);
-    const newUser = await this.userService.createUser({
+    const user = await this.userService.createUser({
       email,
       password: hashedPassword,
       name,
       role: role || "USER",
     });
 
-    return this.generateAccessToken(newUser);
+    const accessToken = await this.generateAccessToken(user);
+
+    return { user, accessToken };
   }
 
   private async validatePassword(
@@ -68,12 +74,12 @@ export class AuthService {
     return await bcrypt.compare(password, userPassword);
   }
 
-  async generateAccessToken(user: any): Promise<{ accessToken: string }> {
+  async generateAccessToken(user: any): Promise<string> {
     const payload = { email: user.email, sub: user.id, role: user.role };
     const accessToken = await this.jwtService.signAsync(payload, {
       secret: this.configService.secret,
       expiresIn: this.configService.signOptions.expiresIn,
     });
-    return { accessToken };
+    return accessToken;
   }
 }

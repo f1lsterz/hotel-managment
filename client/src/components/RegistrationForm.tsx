@@ -4,8 +4,10 @@ import { registration } from "../api/userApi";
 import { toast } from "react-toastify";
 import { AxiosError } from "axios";
 import google_logo from "../assets/images/google_logo.png";
+import { useUserStore } from "../stores/user";
 
 const RegistrationForm: React.FC = () => {
+  const loginUser = useUserStore((state) => state.login);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -29,7 +31,8 @@ const RegistrationForm: React.FC = () => {
     e.preventDefault();
 
     try {
-      await registration(formData);
+      const { user } = await registration(formData);
+      loginUser(user);
       toast.success("Registration successful! Redirecting to home...");
       setFormData({ name: "", email: "", password: "" });
       setTimeout(() => {

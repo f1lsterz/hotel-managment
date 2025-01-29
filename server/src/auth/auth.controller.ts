@@ -13,6 +13,7 @@ import { LoginDto } from "./dto/loginDto";
 import { RegistrationDto } from "./dto/registrationDto";
 import { GoogleOAuthGuard } from "src/common/guards/googleOAuth.guard";
 import { JwtAuthGuard } from "src/common/guards/jwtAuth.guard";
+import { User } from "@prisma/client";
 
 @Controller("/auth")
 export class AuthController {
@@ -22,8 +23,8 @@ export class AuthController {
   async login(
     @Body() loginDto: LoginDto,
     @Res({ passthrough: true }) res: Response
-  ): Promise<{ message: string }> {
-    const { accessToken } = await this.authService.login(loginDto);
+  ): Promise<{ user: User }> {
+    const { user, accessToken } = await this.authService.login(loginDto);
     console.log(accessToken);
 
     res.cookie("accessToken", accessToken, {
@@ -33,15 +34,15 @@ export class AuthController {
       maxAge: 24 * 60 * 60 * 1000,
     });
 
-    return { message: "Login successful" };
+    return { user };
   }
 
   @Post("registration")
   async registration(
     @Body() registrationDto: RegistrationDto,
     @Res({ passthrough: true }) res: Response
-  ): Promise<{ message: string }> {
-    const { accessToken } =
+  ): Promise<{ user: User }> {
+    const { user, accessToken } =
       await this.authService.registration(registrationDto);
 
     res.cookie("accessToken", accessToken, {
@@ -50,7 +51,7 @@ export class AuthController {
       sameSite: "strict",
       maxAge: 24 * 60 * 60 * 1000,
     });
-    return { message: "Registration successful" };
+    return { user };
   }
 
   @Get("google")
@@ -64,7 +65,7 @@ export class AuthController {
     @Res({ passthrough: true }) res: Response
   ): Promise<void> {
     const user = req.user;
-    const { accessToken } = await this.authService.generateAccessToken(user);
+    const accessToken = await this.authService.generateAccessToken(user);
     console.log(accessToken);
 
     res.cookie("accessToken", accessToken, {

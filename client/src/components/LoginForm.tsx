@@ -5,6 +5,7 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { AxiosError } from "axios";
 import google_logo from "../assets/images/google_logo.png";
+import { useUserStore } from "../stores/user";
 
 const LoginForm: React.FC = () => {
   const [formData, setFormData] = useState({
@@ -12,6 +13,7 @@ const LoginForm: React.FC = () => {
     password: "",
   });
   const navigate = useNavigate();
+  const loginUser = useUserStore((state) => state.login);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -29,7 +31,8 @@ const LoginForm: React.FC = () => {
     e.preventDefault();
 
     try {
-      await login(formData);
+      const { user } = await login(formData);
+      loginUser(user);
       toast.success("Login successful! Redirecting to home...");
       setFormData({ email: "", password: "" });
       setTimeout(() => {

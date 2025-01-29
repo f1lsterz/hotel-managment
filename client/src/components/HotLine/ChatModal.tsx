@@ -22,17 +22,8 @@ const ChatModal: React.FC<ChatModalProps> = ({ isOpen, onClose }) => {
           transports: ["websocket"],
         }
       );
+
       setSocket(socketInstance);
-
-      socketInstance.emit("findAllMessages");
-
-      socketInstance.on("findAllMessages", (fetchedMessages: Message[]) => {
-        setMessages(fetchedMessages);
-      });
-
-      socketInstance.on("newMessage", (message: Message) => {
-        setMessages((prevMessages) => [...prevMessages, message]);
-      });
 
       return () => {
         socketInstance.disconnect();
@@ -41,13 +32,7 @@ const ChatModal: React.FC<ChatModalProps> = ({ isOpen, onClose }) => {
     }
   }, [isOpen]);
 
-  const handleSendMessage = () => {
-    if (newMessage.trim() && socket) {
-      socket.emit("createMessage", { content: newMessage, senderId: user?.id });
-      console.log("Sent message:", { content: newMessage, senderId: user?.id });
-      setNewMessage("");
-    }
-  };
+  const handleSendMessage = () => {};
 
   return (
     <div
